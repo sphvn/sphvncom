@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html manifest="sphvn.appcache">
+<head>
+  <title>Setup Purescript and JQuery Basic Example</title>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type">
+  <meta content="@sphvn, Stephen Underwood" name="description">
+  <meta content="Purescript,jQuery,Example,Setup,Guide" name="keywords">
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#E7976B">
+  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+  <meta name="theme-color" content="#E7976B">
+  <!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+  <script src="js/bundle.js"></script>
+  <noscript>
+    <link href="css/skel.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-xlarge.css" rel="stylesheet">
+  </noscript>
+  <!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+
+  <link rel="stylesheet" href="css/monokai_sublime.css">
+  <script src="js/highlight.pack.js"></script>
+</head>
+<body id="top">
+
+  <header id="header">
+    <a class="image avatar" href="/"><img alt="" src="images/avatar.jpg"></a>
+    <h1>
+      <strong>@sphvn</strong>, <nowrap>Stephen Underwood</nowrap>
+      <br>
+      Developer, Perth
+    </h1>
+  </header>
+
+  <div id="main">
+
+    <section id="one">
+      <header class="major">
+        <h1>
+          Setup Purescript &amp; JQuery
+        </h1>
+      </header>
+      <p>
+        This is intended to be a simple quick start guide for getting Purescript setup for web development with <a href="https://jquery.com/" target="_blank">Jquery</a> up and running on your system and will require <a href="https://nodejs.org/" target="_blank">NodeJS</a> and the <a href="http://www.purescript.org/" target="_blank">PureScript compiler</a> to be installed.
+      </p>
+      <p>
+        If you want to skip the tutorial just clone <a href="https://bitbucket.org/sphvn/purescript-jquery-example" target="_blank">this bitbucket repo</a> and run the following commands.
+      </p>
+      <pre>
+        <code>
+npm install -g grunt grunt-cli bower
+npm install grunt grunt-purescript grunt-contrib-watch
+bower install
+grunt
+        </code>
+      </pre>
+    </section>
+
+    <section id="two">
+      <header class="major">
+        <h1>
+          Getting Started with PureScript and jQuery
+        </h1>
+      </header>
+      <p>
+        First of all you will want to create a directory for your project and cd into it
+      </p>
+      <pre>
+        <code>
+mkdir purs-play
+cd purs-play
+        </code>
+      </pre>
+      <p>
+        We will be using the <a href="http://gruntjs.com/" target="_blank">Grunt</a> to manage the build tasks which we will install with NPM
+      </p>
+      <pre>
+        <code>
+npm install -g grunt grunt-cli
+        </code>
+      </pre>
+      <p>
+        We will be using the <a href="http://bower.io/" target="_blank">Bower</a> package manager to install and manage PureScript dependencies as the PureScript community has standardized on using Bower for PureScript dependencies.
+      </p>
+      <pre>
+        <code>
+npm install -g bower
+        </code>
+      </pre>
+      <p>
+        Now we need to setup NPM dependencies local to the project, we will need the following
+      </p>
+      <pre>
+        <code>
+npm install grunt grunt-purescript grunt-contrib-watch
+        </code>
+      </pre>
+      <p>
+        Now that we have our dependencies for building PureScript we will want to create a Gruntfile.js
+      </p>
+      <pre>
+        <code>
+module.exports = function(grunt) {
+  "use strict";
+
+  grunt.initConfig({
+
+    psc: {
+      options: {
+        main: "Main",
+        modules: ["Main"]
+      },
+      all: {
+        src: [ "src/**/*.purs"
+             , "bower_components/**/src/**/*.purs"],
+        dest: "dist/main.js"
+      }
+    },
+    watch: {
+      files: [ "src/**/*.purs"
+             , "bower_components/**/src/**/*.purs"],
+      tasks: ["psc:all"]
+    }
+  });
+
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks("grunt-purescript");
+
+  grunt.registerTask("default", ["psc:all"]);
+};
+        </code>
+      </pre>
+      <p>
+        As this example is using third party libraries such as "purescript-jquery" we will need to install this dependency, I find the easiest way to search for PureScript dependencies in Bower is to run a search on the command line.
+      </p>
+      <pre>
+        <code class="bash">
+bower search purescript | grep jquery
+
+  purescript-jquery git://github.com/purescript/purescript-jquery.git
+  purescript-reactive-jquery git://github.com/purescript/purescript-reactive-jquery.git
+  purescript-jquery-ajax git://github.com/wfaler/purescript-jquery-ajax.git
+
+bower install purescript-jquery
+        </code>
+      </pre>
+      <p>
+        We can manage these dependencies with a "bower.json" file, you can create one using "bower init" or use the sample one below
+      </p>
+      <pre>
+        <code>
+{
+  "name": "purs-play",
+  "version": "0.0.0",
+  "authors": [
+    "Author"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "purescript-dom": "~0.1.2",
+    "purescript-jquery": "~0.4.0",
+    "purescript-monad-eff": "~0.1.0"
+  }
+}
+        </code>
+      </pre>
+      <p>
+        With the "bower.json" file setup, we can simply run "bower install" to install all the dependencies.
+      </p>
+      <p>
+        So now that we have a build system and dependency manager setup let's get to writing some PureScript. You will want to create a src directory and create a "Main.purs".
+      </p>
+      <pre>
+        <code>
+mkdir src
+touch src/Main.purs
+        </code>
+      </pre>
+      <p>
+        Now in your favorite text editor open the "Main.purs" file.  First we have to declare the module, import our dependencies and declare our main method.  This example draws inspiration from the <a href="https://github.com/purescript-contrib/purescript-jquery/tree/master/examples" target="_blank">purescript-jquery examples</a>
+      </p>
+      <pre>
+        <code>
+module Main where
+
+import           Data.Either
+import           Prelude
+import           Data.Foreign
+import           Data.Foreign.Class
+import           Control.Monad.Eff
+import qualified Control.Monad.JQuery as J
+import           Debug.Trace
+
+main = J.ready $ do
+  b <- J.body
+
+  div <- J.create "&lt;div>"
+  input <- J.create "&lt;input>"
+  "Message: " `J.appendText` div
+  input `J.append` div
+  div `J.append` b
+
+  response <- J.create "&lt;p>"
+  { color: "blue" } `J.css` response
+  response `J.append` b
+
+  flip (J.on "change") input $ \_ _ -> do
+    Right msg <- read &lt;$> J.getValue input
+    J.setText ("send: " ++ msg) response
+        </code>
+      </pre>
+      <p>
+        Now we can compile this using the "grunt" command.
+      </p>
+      <pre>
+        <code>
+grunt
+Running "psc:all" (psc) task
+>> Created file dist/main.js.
+        </code>
+      </pre>
+      <p>
+        Cool! Now we have a compiled .js file, now we just have to create a .html file, for this example I would just create this in the root directory of the project.
+      </p>
+      <pre>
+        <code>
+&lt;html>
+&lt;head>
+  &lt;title>PureScript Jquery&lt;/title>
+&lt;/head>
+&lt;body>
+  &lt;script type="text/javascript" src="bower_components/jquery/dist/jquery.js">&lt;/script>
+  &lt;script type="text/javascript" src="dist/main.js">&lt;/script>
+&lt;/body>
+&lt;/html>
+        </code>
+      </pre>
+      <p>
+        As we are using <a href="https://jquery.com" target="_blank">JQuery</a> we will need this installed as well, which we can install with Bower.
+      </p>
+      <pre>
+        <code>
+bower install jquery
+        </code>
+      </pre>
+      <p>
+        Awesome! this now sits in "bower_components/jquery/dist/jquery.js", which is the directory I referenced in the .html file above.
+      </p>
+      <p>
+        So now you just have to open the html file you created and you are up and running! You can also run "grunt watch" to compile everytime you save. Sweet!
+      </p>
+    </section>
+
+    <section id="three">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+          /* * * CONFIGURATION VARIABLES * * */
+          var disqus_shortname = 'sphvn';
+          
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    </section>
+  </div>
+
+
+  <footer id="footer">
+    <ul class="icons">
+
+      <li>
+        <a class="icon fa-google-plus" href="https://plus.google.com/100453825037439640520/posts" target="_blank">
+        <span class="label">Plus</span></a>
+      </li>
+
+      <li>
+        <a class="icon fa-linkedin" href="https://au.linkedin.com/pub/stephen-underwood/80/ab3/8a7" target="_blank">
+        <span class="label">LinkedIn</span></a>
+      </li>
+
+      <li>
+        <a class="icon fa-twitter" href="https://twitter.com/sphvn"target="_blank">
+        <span class="label">Twitter</span></a>
+      </li>
+
+      <li>
+        <a class="icon fa-github" href="https://github.com/sphvn" target="_blank">
+        <span class="label">Github</span></a>
+      </li>
+
+      <li>
+        <a class="icon fa-bitbucket" href="https://bitbucket.org/sphvn"target="_blank">
+        <span class="label">Bitbucket</span></a>
+      </li>
+
+      <li>
+        <a class="icon fa-stack-overflow" href="http://stackoverflow.com/users/261564/sphvn"target="_blank">
+        <span class="label">Stack Overflow</span></a>
+      </li>
+
+      <li>
+        <a class="icon fa-envelope-o" href="mailto:_@sphvn.com"target="_blank">
+        <span class="label">Email</span></a>
+      </li>
+    </ul>
+
+    <ul class="copyright">
+      <li>&copy; Stephen Underwood 2015</li>
+      <li>sphvn.com</li>
+    </ul>
+  </footer>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="js/ga.js"></script>
+</body>
+</html>
